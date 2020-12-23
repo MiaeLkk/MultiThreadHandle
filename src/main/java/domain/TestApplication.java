@@ -19,7 +19,7 @@ public class TestApplication {
 				list.add(i);
 			}
 			
-			new MultiThreadUtil<Integer>(3, list, -1L, 0, new Function<Integer, Boolean>() {
+			new MultiThreadUtil<Integer>(3, list, 1000L, 3, new Function<Integer, Boolean>() {
 
 				@Override
 				public Boolean apply(Integer obj) {
