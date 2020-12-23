@@ -139,7 +139,6 @@ public class MultiThreadUtil<T> {
 							errorList = new CopyOnWriteArrayList<T>();
 							if(sleepTime > 0L && retryTimes > 0) {
 								try {
-									log.info("sleep");
 									Thread.sleep(sleepTime);
 								} catch (InterruptedException e) {
 									log.error(PrintUtil.printExce(e));
