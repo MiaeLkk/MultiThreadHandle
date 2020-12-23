@@ -13,18 +13,17 @@ import utils.PrintUtil;
 public class TestApplication {
 
 	public static void main(String[] args) {
-		List<String> list = new ArrayList<String>();
+		List<Integer> list = new ArrayList<Integer>();
 		try {
-			for(int i = 0 ; i < 100000 ; i++) {
-				list.add(""+i);
+			for(int i = 0 ; i < 1000 ; i++) {
+				list.add(i);
 			}
 			
-			new MultiThreadUtil<String>(1000, list, 1000L, 3, new Function<String, Boolean>() {
+			new MultiThreadUtil<Integer>(3, list, -1L, 0, new Function<Integer, Boolean>() {
 
 				@Override
-				public Boolean apply(String obj) {
-					int ran = new Random().nextInt(3);
-					log.info(obj+":"+ran);
+				public Boolean apply(Integer obj) {
+					int ran = new Random().nextInt(10);
 					if(ran == 0) {
 						return true;
 					}

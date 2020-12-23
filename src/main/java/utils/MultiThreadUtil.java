@@ -47,7 +47,7 @@ public class MultiThreadUtil<T> {
      * @param amount	线程数量
      * @param list		待处理list
      * @param slpTime	尝试时间隔时间
-     * @param maxRT		尝试次数，不包含特征匹配首次
+     * @param maxRT		尝试次数，不包含特征匹配前两次
      * @param func		处理方法，false表示需要重新处理
      */
     public MultiThreadUtil(Integer amount, List<T> list, Long slpTime,  Integer maxRT, Function<T, Boolean> func) {
@@ -116,18 +116,15 @@ public class MultiThreadUtil<T> {
 						
 							if(errorSize == currentErrorSize) {//表示此次没有进展
 								retryTimes++;
-								log.info("没有进展，尝试-"+retryTimes);
-								if(maxRetryTimes >= 0) {//有限制次数控制
-									if(retryTimes >= maxRetryTimes) {//达到重试次数，终止
-										log.info("SHUTDOWN NOW!!!");
-										log.error("BE SHUTDOWN!!!");
-										executor.shutdownNow();
-										shutdown = true;
-									}
+								if(maxRetryTimes >= 0 && retryTimes > maxRetryTimes) {//有限制次数控制 && 达到重试次数，终止
+									log.info("共重试 "+ maxRetryTimes +" 次，仍然没有进展，即将终止");
+									log.info("SHUTDOWN NOW!!!");
+									log.error("BE SHUTDOWN!!!");
+									executor.shutdownNow();
+									shutdown = true;
+								}else {//没有限制次数控制
+									log.info("没有进展，即将第 "+retryTimes+" 次尝试");
 								}
-//								else {//没有限制次数控制
-//									
-//								}
 							}else {
 								errorSize = currentErrorSize;
 								retryTimes = 0;
@@ -140,6 +137,7 @@ public class MultiThreadUtil<T> {
 							errorList = new CopyOnWriteArrayList<T>();
 							if(sleepTime > 0L && retryTimes > 0) {
 								try {
+									log.info("sleep for "+sleepTime+" ms");
 									Thread.sleep(sleepTime);
 								} catch (InterruptedException e) {
 									log.error(PrintUtil.printExce(e));
