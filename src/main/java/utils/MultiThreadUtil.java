@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author liukaiyi
  * @date 2020年12月21日
  * @param <T>
+ * 多线程处理工具
  */
 @Slf4j
 public class MultiThreadUtil<T> {
